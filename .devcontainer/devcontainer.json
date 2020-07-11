@@ -1,0 +1,6 @@
+{
+	"image": "matthijsbos/nerdrage-dev:latest",
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash"
+	}
+}
