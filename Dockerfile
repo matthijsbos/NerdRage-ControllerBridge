@@ -1,6 +1,6 @@
-FROM python:3.8
+FROM matthijsbos/nerdrage-base
 WORKDIR /usr/src/app
 COPY ./requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 COPY ./NerdRageControllerBridge.py .
-CMD ["python", "./NerdRageControllerBridge.py"]
+CMD ["python3", "./NerdRageControllerBridge.py"]
