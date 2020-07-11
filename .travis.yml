@@ -1,0 +1,38 @@
+---
+language: shell
+os: linux
+dist: bionic
+services:
+  - docker
+env:
+  global:
+   - DOCKER_CLI_EXPERIMENTAL=enabled
+   - DOCKER_REPO=matthijsbos/nerdrage-controller-bridge
+   - DOCKER_TAG=latest
+
+before_script:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+script:
+  - docker build --pull -t ${DOCKER_REPO}:${DOCKER_TAG}-${TRAVIS_CPU_ARCH} .
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then docker push ${DOCKER_REPO}:${DOCKER_TAG}-${TRAVIS_CPU_ARCH} ; fi
+
+stages:
+  - build
+  - name: deploy
+    if: branch = master
+
+jobs:
+  include:
+    - arch: amd64
+      stage: build
+    - arch: arm64
+      stage: build
+    - arch: amd64
+      stage: deploy
+      script: 
+        - docker pull ${DOCKER_REPO}:${DOCKER_TAG}-amd64
+        - docker pull ${DOCKER_REPO}:${DOCKER_TAG}-arm64
+        - docker manifest create ${DOCKER_REPO}:${DOCKER_TAG} ${DOCKER_REPO}:${DOCKER_TAG}-amd64 ${DOCKER_REPO}:${DOCKER_TAG}-arm64
+        - docker manifest push ${DOCKER_REPO}:${DOCKER_TAG}
+
+    
