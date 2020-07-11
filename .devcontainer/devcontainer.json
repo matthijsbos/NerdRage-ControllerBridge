@@ -2,5 +2,8 @@
 	"image": "matthijsbos/nerdrage-dev:latest",
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash"
-	}
+	},
+	"postCreateCommand": 
+		"pip3 install --no-cache-dir pylint && pip3 install --no-cache-dir -r requirements.txt && pip3 install --no-cache-dir -r requirements_test.txt && python3 setup.py develop",
+	"extensions": ["ms-python.python"]
 }
